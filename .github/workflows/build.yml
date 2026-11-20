@@ -1,0 +1,33 @@
+name: Build Theos Tweak
+
+on:
+workflow_dispatch:
+push:
+branches:
+- main
+
+jobs:
+build:
+runs-on: ubuntu-22.04                      
+- name: Checkout
+    uses: actions/checkout@v4
+
+  - name: Install dependencies
+    run: |
+      sudo apt-get update
+      sudo apt-get install -y git make clang perl unzip wget
+
+  - name: Install Theos
+    run: |
+      git clone --recursive https://github.com/theos/theos.git $HOME/theos
+
+  - name: Build package
+    run: |
+      export THEOS=$HOME/theos
+      make package FINALPACKAGE=1
+
+  - name: Upload deb
+    uses: actions/upload-artifact@v4
+    with:
+      name: deb-package
+      path: packages/*.deb      
