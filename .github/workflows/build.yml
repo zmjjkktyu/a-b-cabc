@@ -19,11 +19,20 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y git make clang perl unzip wget
+          sudo apt-get install -y git make clang perl unzip wget lzma
 
       - name: Install Theos
         run: |
           git clone --recursive https://github.com/theos/theos.git "$HOME/theos"
+
+      - name: Install iOS SDK
+        run: |
+          cd "$HOME/theos"
+          wget -q https://github.com/theos/sdks/archive/refs/heads/master.zip
+          unzip -q master.zip -d /tmp/theos-sdks
+          mkdir -p "$HOME/theos/sdks"
+          cp -r /tmp/theos-sdks/sdks-master/*.sdk "$HOME/theos/sdks/"
+          rm -f master.zip
 
       - name: Build package
         run: |
