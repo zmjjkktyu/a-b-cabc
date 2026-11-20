@@ -19,20 +19,31 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y git make clang perl unzip wget lzma
+          sudo apt-get install -y git make clang perl unzip wget lzma xz-utils
 
       - name: Install Theos
         run: |
           git clone --recursive https://github.com/theos/theos.git "$HOME/theos"
 
+      - name: Install iOS toolchain
+        run: |
+          mkdir -p "$HOME/theos/toolchain"
+          wget -q https://github.com/theos/toolchain/releases/latest/download/ios-toolchain_clang+llvm+ld64_latest_linux_x86_64.zip
+          unzip -q ios-toolchain_clang+llvm+ld64_latest_linux_x86_64.zip -d "$HOME/theos/toolchain"
+
       - name: Install iOS SDK
         run: |
-          cd "$HOME/theos"
+          mkdir -p "$HOME/theos/sdks"
           wget -q https://github.com/theos/sdks/archive/refs/heads/master.zip
           unzip -q master.zip -d /tmp/theos-sdks
-          mkdir -p "$HOME/theos/sdks"
           cp -r /tmp/theos-sdks/sdks-master/*.sdk "$HOME/theos/sdks/"
-          rm -f master.zip
+
+      - name: Check project files
+        run: |
+          echo "=== Project files ==="
+          ls -la
+          echo "=== Tweak files ==="
+          find . -maxdepth 3 -name "Tweak.xm" -o -name "Makefile"
 
       - name: Build package
         run: |
