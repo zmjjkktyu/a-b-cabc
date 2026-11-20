@@ -11,6 +11,11 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
+      - name: Checkout
+        run: |
+          git clone "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" .
+          git checkout "$GITHUB_SHA"
+
       - name: Install dependencies
         run: |
           sudo apt-get update
