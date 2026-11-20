@@ -11,14 +11,6 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout
-        run: |
-          git clone "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" repo
-          cd repo
-          git checkout "$GITHUB_SHA"
-          cp -r . ../workspace
-          cd ..
-
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -30,10 +22,9 @@ jobs:
 
       - name: Build package
         run: |
-          cd workspace
           export THEOS="$HOME/theos"
           make package FINALPACKAGE=1
 
       - name: Find deb
         run: |
-          find workspace -name "*.deb" -type f
+          find . -name "*.deb" -type f
