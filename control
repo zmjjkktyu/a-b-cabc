@@ -1,0 +1,10 @@
+Package: com.example.tips18
+Name: Tips18
+Version: 1.0.0
+Architecture: iphoneos-arm64
+Description: iOS 18-style new-feature bulb UI for Apple Tips on iOS 16.1.
+Maintainer: Tips18
+Author: Tips18
+Section: Tweaks
+Priority: optional
+Depends: mobilesubstrate
